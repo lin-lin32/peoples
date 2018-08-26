@@ -1,14 +1,35 @@
 <?php
 
-$peoples = [
-    'Elena Zhuzhneva' => [7, 8, 1, 3, 5, 7, 8, 4, 10],
-    'Dmitry Zhuzhnev' => [2, 2, 4, 1, 5, 7, 1, 6, 7],
-    'Elena Chery' => [10, 7, 4, 2, 12, 7, 11, 6, 1],
-    'Vladimir Voronkov' => [6, 4, 1, 11, 5, 8, 7, 9, 7],
-    'Vladimir Lantsev' => [2, 12, 9, 1, 3, 1, 1, 6, 7],
-    'Marianna Valerianovna' => [12, 9, 1, 10, 9, 7, 6, 6, 7],
-    'Palych' => [2, 2, 4, 1, 5, 1, 12, 6, 7]
-];
+$peoples = [];
+
+$arrFirstNames = file('firstNames.txt', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+$arrLastNames = file('lastNames.txt', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+$count = min(count($arrFirstNames), count($arrLastNames));
+
+while (true) {
+    if (count($peoples) >= $count) {
+        break;
+    }
+
+    $randFirstNameIndex = array_rand($arrFirstNames);
+    $randLastNameIndex = array_rand($arrLastNames);
+
+    $uniqueRandKey = $arrFirstNames[$randFirstNameIndex] . ' ' . $arrLastNames[$randLastNameIndex];
+
+    if (array_key_exists($uniqueRandKey, $peoples)) {
+        continue;
+    }
+
+    $arr = array_fill(0, rand (10 , 30), '');
+
+    $peoples[$uniqueRandKey] = array_map(function() {
+        return rand (1 , 10);
+    }, $arr);
+}
+
+//echo '<pre>';
+//var_dump($peoples);
+//echo '</pre>';
 
 $fp = fopen('counter.txt', 'w+t');
 
@@ -21,4 +42,3 @@ foreach ($peoples as $key => $value) {
 }
 echo 'File created';
 fclose($fp);
-
